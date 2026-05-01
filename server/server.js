@@ -12,13 +12,39 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const clientUrl = process.env.CLIENT_URL;
+
 const corsOptions = {
-  origin: "*",
+  origin(origin, callback) {
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (clientUrl && origin === clientUrl) {
+      return callback(null, true);
+    }
+
+    if (process.env.NODE_ENV !== "production" && !clientUrl) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Team Task Manager API is running",
+    data: {
+      health: "/health",
+      api: "/api"
+    }
+  });
+});
 
 app.get("/health", (req, res) => {
   res.status(200).json({
