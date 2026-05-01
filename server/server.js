@@ -12,23 +12,8 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const clientUrl = process.env.CLIENT_URL;
-
 const corsOptions = {
-  origin(origin, callback) {
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    if (clientUrl && origin === clientUrl) {
-      return callback(null, true);
-    }
-
-    if (process.env.NODE_ENV !== "production" && !clientUrl) {
-      return callback(null, true);
-    }
-
-    return callback(new Error("Not allowed by CORS"));
-  },
+  origin: "*",
   credentials: true
 };
 
