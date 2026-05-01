@@ -37,7 +37,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(PORT, "0.0.0.0", () => {
     console.log(`Team Task Manager API listening on port ${PORT}`);
   });
 });
